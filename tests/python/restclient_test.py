@@ -1,8 +1,8 @@
 import sys
 import os
 import unittest
-from mock import patch, Mock
 import time
+from unittest.mock import patch, Mock
 sys.path.append(os.path.dirname(__file__) + '/../../python')
 from RestClient import RestClient, APIException
 

@@ -6,6 +6,11 @@ test_python:
 	@echo "\n\033[92m\033[1mPYTHON\033[0m\033[0m"
 	python3 -m unittest discover tests/python/ -p '*_test.py' -v
 
+test_golang:
+	@echo "\n\033[92m\033[1mGOLANG\033[0m\033[0m"
+	go test ./golang/...
+
 test:
 	make test_php
 	make test_python
+	make test_golang
