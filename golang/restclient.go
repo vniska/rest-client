@@ -52,7 +52,7 @@ func NewRestClient(cfg Conf) (restclient, error) {
 }
 
 // Call is used to perform a call to the RESTful API.
-func (this restclient) Call(path string, params interface{}, input_method ...string) (interface{}, error) {
+func (this restclient) Call(path string, params interface{}, inputMethod ...string) (interface{}, error) {
 	bodyjson, err := json.Marshal(params)
 
 	if err != nil {
@@ -62,8 +62,8 @@ func (this restclient) Call(path string, params interface{}, input_method ...str
 	this.bodystr = string(bodyjson)
 
 	method := "POST"
-	if len(input_method) > 0 {
-		method = input_method[0]
+	if len(inputMethod) > 0 {
+		method = inputMethod[0]
 	}
 	if method == "GET" {
 		this.bodystr = "";
