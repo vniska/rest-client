@@ -218,7 +218,7 @@ Golang
 		// Call V1 getRecipient
 
 		// Create client
-		mailer_v1, err := mailerapi.NewRestClient(config)
+		mailerV1, err := mailerapi.NewRestClient(config)
 
 		// Define parameters
 		params := []interface{}{
@@ -226,16 +226,16 @@ Golang
 		}
 
 		// Call endpoint
-		resp, err := mailer_v1.Call("getRecipient", params)
+		resp, err := mailerV1.Call("getRecipient", params)
 
 		if err != nil {
 			panic("API returned an error: " + err.Error())
 		}
 
 		// Go thru response
-		v1_resp_map, v1_ok := resp.(map[string]interface{})
-		if v1_ok {
-			recipient := v1_resp_map["recipient"].(map[string]interface{})
+		v1RespMap, ok := resp.(map[string]interface{})
+		if ok {
+			recipient := v1RespMap["recipient"].(map[string]interface{})
 			fmt.Printf("V1 - getRecipient: Got recipient id: %+v email: %+v\n", recipient["id"], recipient["email"])
 		}
 
@@ -244,36 +244,36 @@ Golang
 
 		// Create client
 		config.Apiversion = 2
-		mailer_v2, err := mailerapi.NewRestClient(config)
+		mailerV2, err := mailerapi.NewRestClient(config)
 
 		// Define parameters
 
-		csv_data := "email;some-property\nrecipient-1@example.com;some-value-1\nrecipient-2@example.com;some-value-2"
+		csvData := "email;some-property\nrecipient-1@example.com;some-value-1\nrecipient-2@example.com;some-value-2"
 
 		// v2 functions take params with keys, tags used here since lowercase type is restricted
-		v2_params := struct{
+		v2Params := struct{
 			ListName string `json:"name"`
 			Data string `json:"data"`
 			Type string `json:"type"`
 			Truncate bool `json:"truncate"`
 		}{
 			ListName: "new list",
-			Data: b64.StdEncoding.EncodeToString([]byte(csv_data)),
+			Data: b64.StdEncoding.EncodeToString([]byte(csvData)),
 			Type: "csv",
 			Truncate: false,
 		}
 
 		// Call endpoint
-		resp, err = mailer_v2.Call("import/mailinglist", v2_params)
+		resp, err = mailerV2.Call("import/mailinglist", v2Params)
 
 		if err != nil {
 			panic("API returned an error: " + err.Error())
 		}
 
 		// Go thru response
-		v2_resp_map, v2_ok := resp.(map[string]interface{})
-		if v2_ok {
-			fmt.Printf("V2 - import/mailinglist: List created/updated, list_id %+v\n", v2_resp_map["list_id"])
+		v2RespMap, ok := resp.(map[string]interface{})
+		if ok {
+			fmt.Printf("V2 - import/mailinglist: List created/updated, list_id %+v\n", v2RespMap["list_id"])
 		}
 
 
@@ -281,20 +281,20 @@ Golang
 
 		// Create client
 		config.Apiversion = 3
-		mailer_v3, err := mailerapi.NewRestClient(config)
+		mailerV3, err := mailerapi.NewRestClient(config)
 
 		// Call endpoint
-		resp, err = mailer_v3.Call("events?at_start=2023-06-20T12:00:00&at_end=2023-06-22T12:00:00", nil, "GET")
+		resp, err = mailerV3.Call("events?at_start=2023-06-20T12:00:00&at_end=2023-06-22T12:00:00", nil, "GET")
 
 		if err != nil {
 			panic("API returned an error: " + err.Error())
 		}
 
 		// Go thru response
-		v3_resp_map, v3_ok := resp.([]interface{})
-		if v3_ok {
+		v3RespMap, ok := resp.([]interface{})
+		if ok {
 			fmt.Printf("V3 - events: Got following results:\n")
-			for _, v := range v3_resp_map {
+			for _, v := range v3RespMap {
 				item := v.(map[string]interface{})
 				recipient := item["recipient"].(map[string]interface{})
 				fmt.Printf("\tat: %+v, recipient: %+v, event: %+v\n", item["at"], recipient["email"], item["type"])
